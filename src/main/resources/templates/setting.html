@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Pangolin&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@mdi/font@5.x/css/materialdesignicons.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon_io/favicon-32x32.png">
+
+    <title>Barbershop Mr.White | Setting</title>
+
+    <style>
+        * {
+            font-family: 'Roboto' !important;
+        }
+    </style>
+    <script th:inline="javascript">
+        const barber = /*[[${barber}]]*/ null;
+        const schedule = /*[[${schedule}]]*/ null;
+    </script>
+</head>
+
+<body>
+<div id="app">
+    <v-app>
+        <v-main>
+            <v-container>
+                <v-row justify=center>
+                    <v-timeline dense clipped style="max-width: 600px;">
+                        <v-timeline-item class="" hide-dot>
+                            <v-row class="justify-center">
+                                <v-chip label class="ma-2" color="grey" outlined>Не рабочее</v-chip>
+                                <v-chip label class="ma-2" color="green white--text">Записан клиент</v-chip>
+                                <v-chip label class="ma-2" color="orange" outlined>Ожидаю клиента</v-chip>
+                            </v-row>
+                        </v-timeline-item>
+
+                        <v-timeline-item class="" hide-dot>
+                            <v-row class="spacer" no-gutters justify="center">
+                                <h2 class="ml-2">Barber {{barber.name}}</h2>
+
+                            </v-row>
+                        </v-timeline-item>
+
+                        <v-timeline-item fill-dot class="white--text" color="green" large>
+                            <template v-slot:icon>
+                                <v-icon color=white>mdi-plus</v-icon>
+                            </template>
+
+                            <v-dialog ref="dialog" v-model="modal" :return-value.sync="date" persistent
+                                      width="290px">
+                                <template v-slot:activator="{ on, attrs }">
+                                    <v-text-field v-model="date" label="Add new work day" readonly outlined dense
+                                                  hide-details v-bind="attrs" v-on="on" append-icon="mdi-content-save"
+
+                                    ></v-text-field>
+                                </template>
+                                <v-date-picker v-model="date" scrollable
+                                               :min="tomorrow"
+                                >
+                                    <v-spacer></v-spacer>
+                                    <v-btn text color="primary" @click="modal = false">Cancel</v-btn>
+                                    <v-btn text color="primary" @click="addNewDay(date)">OK</v-btn>
+                                </v-date-picker>
+                            </v-dialog>
+                        </v-timeline-item>
+
+
+                        <v-timeline-item class="mb-4" small v-for="sc in schedule" :key="sc.id">
+                            <v-row justify="space-between">
+                                <v-col>
+                                    <v-card class="elevation-1" outlined>
+                                        <v-card-title class="justify-center">
+                                            {{sc.day}}
+                                            <v-spacer></v-spacer>
+                                            <v-btn
+                                                    small text outlined
+                                                    @click="sendNotificationToTelegram(sc)"
+                                            >SEND TO TELEGRAM</v-btn>
+                                        </v-card-title>
+                                        <v-divider></v-divider>
+                                        <v-card-text>
+                                            <v-row class="justify-center">
+                                                <div v-for="i in 21" v-if="i >= 10">
+                                                    <v-chip label class="ma-2">
+                                                        {{i}}:00
+                                                    </v-chip>
+                                                    <v-chip label class="ma-2">
+                                                        {{i}}:30
+                                                    </v-chip>
+                                                </div>
+                                            </v-row>
+                                        </v-card-text>
+                                    </v-card>
+                                </v-col>
+                            </v-row>
+                        </v-timeline-item>
+
+                    </v-timeline>
+                </v-row>
+            </v-container>
+        </v-main>
+    </v-app>
+</div>
+
+<script src="/js/vue.js"></script>
+<script src="/js/vuetify.js"></script>
+<script src="/js/vue-toasted.js"></script>
+<script src="/js/axios.js"></script>
+<script>
+
+    Vue.use(Toasted)
+
+    new Vue({
+        el: '#app',
+        vuetify: new Vuetify(),
+        data: () => ({
+            events: [],
+            input: null,
+            nonce: 0,
+            modal: false,
+            date: new Date().toISOString().substr(0, 10),
+            tomorrow: new Date().toISOString().substr(0, 10),
+
+            barber: barber,
+            schedule: schedule,
+        }),
+
+        computed: {
+            timeline() {
+                return this.events.slice().reverse()
+            },
+        },
+
+        created(){
+            this.tomorrow = new Date(new Date().setDate(new Date().getDate() + 1)).toISOString().substr(0, 10);
+        },
+
+        watch: {
+            schedule : {
+                handler: function (val, oldVal) {
+                    //Update server
+                    axios.post('/schedule/update', this.schedule).then(res => {
+                        //Update schedule
+                        this.$toasted.success('Сохранено', {
+                            position: 'bottom-right',
+                            duration: 2000,
+                        })
+                    })
+                },
+                deep: true
+            }
+        },
+
+        methods: {
+            comment() {
+                const time = (new Date()).toTimeString()
+                this.events.push({
+                    id: this.nonce++,
+                    text: this.input,
+                    time: time.replace(/:\d{2}\sGMT-\d{4}\s\((.*)\)/, (match, contents, offset) => {
+                        return ` ${contents.split(' ').map(v => v.charAt(0)).join('')}`
+                    }),
+                })
+
+                this.input = null
+            },
+            addNewDay(date) {
+                this.modal = false
+
+                let alreadyExist = false
+                this.schedule.forEach(sc => {
+                    if (sc.day === date)
+                        alreadyExist = true
+                })
+
+                if (!alreadyExist) {
+                    axios.post('/schedule/add', {
+                        day: date,
+                        barberId: this.barber.id
+                    }).then(res => {
+                        this.schedule = [
+                            res.data,
+                            ...this.schedule
+                        ]
+
+                        //Update schedule
+                        this.$toasted.success('Добавлен новый рабочий день', {
+                            position: 'bottom-right',
+                            duration: 2000,
+                        })
+                    })
+                } else {
+                    this.$toasted.info('Этот день уже добавлен', {
+                        position: 'bottom-right',
+                        duration: 2000,
+                    })
+                }
+            },
+            sendNotificationToTelegram(schedule){
+                axios.post('/schedule/notification', schedule).then(res => {
+                    this.$toasted.success('Отправлено', {
+                        position: 'bottom-right',
+                        duration: 2000,
+                    })
+                })
+            }
+        }
+    })
+</script>
+</body>
+
+</html>

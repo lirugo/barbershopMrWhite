@@ -1,0 +1,30 @@
+version: '3'
+
+services:
+
+  dbPostgres:
+    container_name: db_postgres_barbershopMrWhite
+    image: postgres:11
+    restart: always
+    ports:
+      - 5432:5432
+    volumes:
+      - ~/pg_data_barbershopMrWhite:/var/lib/postgresql/data/pgdata
+    environment:
+      POSTGRES_DB: barbershop
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      PGDATA: /var/lib/postgresql/data/pgdata
+
+#  server:
+#    container_name: server_barbershopMrWhite
+#    restart: always
+#    build: .
+#    environment:
+#      POSTGRES_HOST: dbPostgres
+#    ports:
+#      - 8080:8080
+#    volumes:
+#      - /barbershopMrWhite:/barbershopMrWhite
+#    links:
+#      - dbPostgres
