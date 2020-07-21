@@ -4,10 +4,6 @@ let burgerMenu = document.querySelector(".burger-menu")
 let menu = document.querySelector(".menu")
 
 
-// let unlock = true
-
-
-
 function openBurgerMenu () {
     if (burgerMenu.classList.contains("active")) {
         burgerMenu.classList.remove("active")
@@ -32,14 +28,7 @@ window.onresize = function(event) {
         burgerMenu.classList.remove("active")
         burgerMenu.innerHTML = `<img src="img/menu.svg" alt="">`
     }
-    // if (windowWidth > 700 && windowWidth <= 1050) {
-    //     slidesToShow = 2
-    //     itemWidth = container.clientWidth / slidesToShow
-    // } 
-    // if (windowWidth <= 700) {
-    //     slidesToShow = 1
-    //     itemWidth = container.clientWidth / slidesToShow
-    // }
+
 }
 function initMap() {
     let addressMrWhite = {lat: 50.437280, lng: 30.350688}
@@ -61,50 +50,62 @@ function initMap() {
 
     )
 }
-const recordButtonsOpen = document.querySelectorAll(".record-button")
-
-if (recordButtonsOpen.length > 0) {
-
-    for (let i = 0; i < recordButtonsOpen.length; i++) {
-        const recordButtonOpen = recordButtonsOpen[i]
-        recordButtonOpen.addEventListener("click", function (e) {
-            const recordButtonPopup = document.querySelector(".record-button-popup")
-            popupRecordingOpen (recordButtonPopup)
-        })
+const recordButtons = document.querySelectorAll(".record-button")
+for (let i = 0; i < recordButtons.length; i++) {
+    recordButton = recordButtons[i]
+    recordButton.onclick = function() {
+        window.open('https://www.instagram.com/barbershop_mr.white/?igshid=un64ynclk70t','_blank')
+        console.log("dshfj")
     }
 }
 
-const popupCloseIcon = document.querySelectorAll(".close-recording-popup")
+//Open record-buttom popup
 
-if (popupCloseIcon.length > 0) {
-    for (let i = 0; i < popupCloseIcon.length; i++) {
-        const element = popupCloseIcon[i]
-        element.addEventListener("click", function (e) {
-            popupRecordingClose(element.closest(".record-button-popup"))
-        })
-    }
-}
-function popupRecordingOpen (openPopup) {
-    if (openPopup) {
-        const popupRecordingActive = document.querySelector(".record-button-popup.open")
-        if (popupRecordingActive) {
-            popupRecordingClose(popupRecordingActive)
-        }
-    }
-    openPopup.classList.add("open")
-    openPopup.addEventListener("click", function (e) {
-        if (!e.target.closest(".record-button-popup-content")) {
-            popupRecordingClose(e.target.closest(".record-button-popup"))
-        }
 
-    })
-}
+// const recordButtonsOpen = document.querySelectorAll(".record-button")
 
-function popupRecordingClose (popupRecordingActive) {
+// if (recordButtonsOpen.length > 0) {
 
-    popupRecordingActive.classList.remove("open")
+//     for (let i = 0; i < recordButtonsOpen.length; i++) {
+//         const recordButtonOpen = recordButtonsOpen[i]
+//         recordButtonOpen.addEventListener("click", function (e) {
+//             const recordButtonPopup = document.querySelector(".record-button-popup")
+//             popupRecordingOpen (recordButtonPopup)
+//         })
+//     }
+// }
 
-}
+// const popupCloseIcon = document.querySelectorAll(".close-recording-popup")
+
+// if (popupCloseIcon.length > 0) {
+//     for (let i = 0; i < popupCloseIcon.length; i++) {
+//         const element = popupCloseIcon[i]
+//         element.addEventListener("click", function (e) {
+//             popupRecordingClose(element.closest(".record-button-popup"))
+//         })
+//     }
+// }
+// function popupRecordingOpen (openPopup) {
+//     if (openPopup) {
+//         const popupRecordingActive = document.querySelector(".record-button-popup.open")
+//         if (popupRecordingActive) {
+//             popupRecordingClose(popupRecordingActive)
+//         }
+//     }
+//     openPopup.classList.add("open")
+//     openPopup.addEventListener("click", function (e) {
+//         if (!e.target.closest(".record-button-popup-content")) {
+//             popupRecordingClose(e.target.closest(".record-button-popup"))
+//         }
+
+//     })
+// }
+
+// function popupRecordingClose (popupRecordingActive) {
+
+//     popupRecordingActive.classList.remove("open")
+
+// }
 
 
 const openReviewPopup = document.querySelector(".open-review-form")
@@ -205,14 +206,14 @@ let items = document.querySelectorAll(".slider-item")
 const btnPrev = document.querySelector(".btn-prev")
 const btnNext = document.querySelector(".btn-next")
 let itemsCount = items.length
-let itemWidth = container.clientWidth / slidesToShow 
+let itemWidth = container.clientWidth / slidesToShow
 let movePosition = slidesToScroll * itemWidth
 
 if (container.clientWidth >= 700 && container.clientWidth < 1050) {
     slidesToShow = 2
     itemWidth = container.clientWidth / slidesToShow
     movePosition = slidesToScroll * itemWidth
-} 
+}
 if (container.clientWidth < 700) {
     slidesToShow = 1
     itemWidth = container.clientWidth / slidesToShow
@@ -230,7 +231,7 @@ function setReviewWidth(){
     checkBtns()
 
     items.forEach ((item) => {
-        item.style.minWidth = `${itemWidth - 30}px` 
+        item.style.minWidth = `${itemWidth - 30}px`
     })
 }
 
@@ -241,14 +242,14 @@ btnNext.addEventListener("click", () => {
 
     setPosition()
     checkBtns()
-})   
+})
 
 btnPrev.addEventListener("click", () => {
     position += movePosition
 
     setPosition()
     checkBtns()
-})  
+})
 
 const setPosition = () => {
     track.style.transform = `translateX(${position}px)`

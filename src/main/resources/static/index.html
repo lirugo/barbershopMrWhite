@@ -82,7 +82,7 @@
             <h2 class="section-title">Цены и услуги</h2>
 
             <div class="price-list">
-                
+
                 <div class="services-wrap">
                     <div class="services-head">
                         <div class="scissors">
@@ -255,7 +255,7 @@
             <h2 class="section-title">Отзывы</h2>
             <div class="slider-container">
                 <div class="reviews-body slider-track" id="reviews-body">
-                    
+
                 </div>
                 <div class="slider-buttons">
                     <button class="btn-prev"><img src="img/arrow-left.svg" alt=""></button>
@@ -271,7 +271,7 @@
                             <form class="review-form" id="sendReview">
                                 <h3 class="form-title">Ваш отзыв</h3>
                                 <p>
-                                   <input type="text" name="name" placeholder="Имя">
+                                    <input type="text" name="name" placeholder="Имя">
                                 </p>
                                 <p>
                                     <input type="email" name="email"  placeholder="E-mail">
@@ -418,12 +418,12 @@
     }
 
     fetchReviews()
-    
+
     let reviewsBody = document.getElementById('reviews-body')
-    
+
     function displayReviews(){
         reviewsBody.innerHTML = ''
-        
+
         reviews.forEach(r => {
             let el = `<div class="reviews-content slider-item">
                         <div class="review-header">
@@ -446,7 +446,7 @@
         let email = e.srcElement[1].value
         let phone = e.srcElement[2].value
         let text = e.srcElement[3].value
-        
+
         let review = new Review(name, text, phone, email)
 
         addReview(review)
