@@ -108,12 +108,12 @@ section {
 .menu {
     flex-grow: 1;
     padding: 0 2em;
+    transition: 0.5s;
 }
 .menu ul {
     display: flex;
     justify-content: space-evenly;
     flex-wrap: wrap;
-
 }
 /* .menu li {
     margin: 0 1em;
@@ -126,24 +126,12 @@ section {
 .menu a:hover{
     border-bottom: 1px solid #f8f3ec;
 }
-.active-menu {
-    display: block;
-    position: absolute;
-    width: 13em;
-    height: 100vh;
-    background-color: #51201e;
-    top: 4.5em;
-    left: 0;
-    padding: 1em;
-    border-top: 1px solid #f8f3ec;
+.menu.active-menu {
+    opacity: 1;
+    visibility: visible;
+    transform: translate(0%, 0px);
 }
-.active-menu li a{
-    font-size: 1.3em;
-    padding: 0.5em 0;
-}
-.active-menu li{
-    padding: 0.5em 0;
-}
+
 .icon-instagram img{
     height: 100%;
     transition: 0.7s;
@@ -586,11 +574,13 @@ section {
 .slider-container {
     overflow: hidden;
     width: 1050px;
+    margin: 0 auto;
 }
 .reviews-body {
     display: flex;
-    align-items: center;
+    /* align-items: center; */
     transition: 0.5s;
+    
     /* justify-content: space-evenly; */
     /* flex-wrap: wrap; */
 
@@ -604,7 +594,8 @@ section {
     border: 1px solid #f1cdb8;
     border-radius: 1em;
     box-shadow: 0 0 20px #f1cdb8;
-    height: 20em;
+    /* height: 20em; */
+    height: max-content;
 }
 
 .review-header {
@@ -839,8 +830,29 @@ section {
 
     }
     .menu {
-        display: none;
+        opacity: 0;
+        visibility: hidden;
+        transform: translate(-100%, 0px);
+        position: absolute;
+        width: 13em;
+        height: 100vh;
+        background-color: #51201e;
+        top: 4.5em;
+        left: 0;
+        padding: 1em;
+        border-top: 1px solid #f8f3ec;
     }
+    .menu ul {
+        display: block;
+    }
+    .menu li a{
+        font-size: 1.3em;
+        padding: 0.5em 0;
+    }
+    .menu li{
+        padding: 0.5em 0;
+    }
+
     .logo {
         flex-grow: 1;
     }
@@ -880,7 +892,7 @@ section {
         scroll-snap-align: none;
     }
     .slider-container {
-        width: 350px;
+        width: 320px;
     }
 }
 @media screen and (max-width: 630px) {
@@ -954,12 +966,16 @@ section {
     .burger-menu img{
         width: 3em;
     }
-    .active-menu {
+    .menu {
+        transform: translate(0px, -100%);
         width: 100%;
         height: max-content;
         padding: 1em 0;
         text-align: center;
         top: 4.4em;
+    }
+    .menu.active-menu {
+        transform: translate(0px, 0%);
     }
 
     .first-page .record-button {
@@ -978,9 +994,9 @@ section {
         width: 100%;
 
     }
-    .container {
+    /* .container {
         width: 90%;
-    }
+    } */
 
     .services-wrap {
         padding-left: 0;

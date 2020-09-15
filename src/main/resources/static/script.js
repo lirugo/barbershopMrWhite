@@ -5,20 +5,15 @@ let menu = document.querySelector(".menu")
 
 
 function openBurgerMenu () {
+    menu.classList.toggle("active-menu")
     if (burgerMenu.classList.contains("active")) {
         burgerMenu.classList.remove("active")
         burgerMenu.innerHTML = `<img src="img/menu.svg" alt="">`
-        menu.classList.toggle("active-menu")
-        menu.classList.toggle("menu")
     }else {
         burgerMenu.classList.add("active")
         burgerMenu.innerHTML = `<img src="img/close.svg" alt="">`
-        menu.classList.toggle("active-menu")
-        menu.classList.toggle("menu")
     }
-}
-burgerMenu.onclick = function() {
-    openBurgerMenu()
+
 }
 window.onresize = function(event) {
     let windowWidth = window.innerWidth
@@ -30,6 +25,13 @@ window.onresize = function(event) {
     }
 
 }
+
+burgerMenu.onclick = function() {
+    openBurgerMenu()
+}
+
+
+
 function initMap() {
     let addressMrWhite = {lat: 50.437280, lng: 30.350688}
     let map = new google.maps.Map(
@@ -216,8 +218,10 @@ if (container.clientWidth >= 700 && container.clientWidth < 1050) {
 }
 if (container.clientWidth < 700) {
     slidesToShow = 1
-    itemWidth = container.clientWidth / slidesToShow
+    itemWidth = container.clientWidth / slidesToShow 
     movePosition = slidesToScroll * itemWidth
+    console.log (itemWidth)
+    console.log (container.clientWidth)
 }
 
 let checkBtns = () => {
